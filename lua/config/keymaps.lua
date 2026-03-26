@@ -19,6 +19,19 @@ local function copy_buffer_path(relative)
   vim.notify("Copied path: " .. value)
 end
 
+local function format_and_save()
+  local ok, conform = pcall(require, "conform")
+  if ok then
+    conform.format({ async = false, lsp_format = "fallback" })
+  end
+
+  vim.cmd("silent write")
+end
+
+vim.keymap.set({ "n", "i" }, "<C-s>", function()
+  format_and_save()
+end, { desc = "Format and Save" })
+
 vim.keymap.set("n", "<leader>fy", function()
   copy_buffer_path(true)
 end, { desc = "Copy Relative Path" })
